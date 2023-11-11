@@ -1,25 +1,11 @@
 import java.util.*
-
+val random = Random()
+val forks = Array(100) { false }
 class Philosopher(private val position: Int, private val totalPhilosophers: Int) {
-    fun startDinner(forks: Array<Boolean>) {
+    fun startDinner() {
         val leftFork = position
         val rightFork = (position + 1) % totalPhilosophers
-        var taken = false
-        if (Random().nextInt(0, 1) == 0)
-            if (!forks[leftFork]) {
-                forks[leftFork] = true
-                taken = true
-                println("Философ $position обедает левой вилкой")
-                return
-            }
-        else
-            if (!forks[rightFork]) {
-                forks[rightFork] = true
-                taken = true
-                println("Философ $position обедает правой вилкой")
-                return
-            }
-        if (!taken) {
+        if (random.nextBoolean()) {
             if (!forks[leftFork]) {
                 forks[leftFork] = true
                 println("Философ $position обедает левой вилкой")
@@ -27,8 +13,19 @@ class Philosopher(private val position: Int, private val totalPhilosophers: Int)
             }
             if (!forks[rightFork]) {
                 forks[rightFork] = true
-                taken = true
                 println("Философ $position обедает правой вилкой")
+                return
+            }
+        }
+        else {
+            if (!forks[rightFork]) {
+                forks[rightFork] = true
+                println("Философ $position обедает правой вилкой")
+                return
+            }
+            if (!forks[leftFork]) {
+                forks[leftFork] = true
+                println("Философ $position обедает левой вилкой")
                 return
             }
         }
@@ -42,13 +39,12 @@ fun main() {
         print("Введите количество философов: ")
         totalPhilosophers = readlnOrNull()?.toIntOrNull()
     } while (totalPhilosophers == null || totalPhilosophers <= 1)
-    val forks = Array(totalPhilosophers) { false }
     val philosophers = Array(totalPhilosophers) { Philosopher(it, totalPhilosophers) }
 
-    val startPhilosopherIndex = Random().nextInt(totalPhilosophers)
+    val startPhilosopherIndex = random.nextInt(totalPhilosophers)
 
     for (i in 0 until totalPhilosophers) {
         val philosopherIndex = (startPhilosopherIndex + i) % totalPhilosophers
-        philosophers[philosopherIndex].startDinner(forks)
+        philosophers[philosopherIndex].startDinner()
     }
 }
