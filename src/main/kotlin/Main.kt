@@ -4,18 +4,34 @@ class Philosopher(private val position: Int, private val totalPhilosophers: Int)
     fun startDinner(forks: Array<Boolean>) {
         val leftFork = position
         val rightFork = (position + 1) % totalPhilosophers
+        var taken = false
         if (Random().nextInt(0, 1) == 0)
             if (!forks[leftFork]) {
                 forks[leftFork] = true
+                taken = true
                 println("Философ $position обедает левой вилкой")
                 return
             }
         else
             if (!forks[rightFork]) {
                 forks[rightFork] = true
+                taken = true
                 println("Философ $position обедает правой вилкой")
                 return
             }
+        if (!taken) {
+            if (!forks[leftFork]) {
+                forks[leftFork] = true
+                println("Философ $position обедает левой вилкой")
+                return
+            }
+            if (!forks[rightFork]) {
+                forks[rightFork] = true
+                taken = true
+                println("Философ $position обедает правой вилкой")
+                return
+            }
+        }
         println("Философ $position размышляет")
     }
 }
